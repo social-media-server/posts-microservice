@@ -3,6 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 
 import { PostsService } from './posts.service';
 import { CreatePostDto, UpdatePostDto } from './dto';
+import { PaginationDto } from '../common';
 
 @Controller()
 export class PostsController {
@@ -16,13 +17,15 @@ export class PostsController {
   }
 
   @MessagePattern('findAllPosts')
-  findAll() {
-    return this.postsService.findAll();
+  findAll(
+    @Payload() paginationDto: PaginationDto,
+  ) {
+    return this.postsService.findAll(paginationDto);
   }
 
   @MessagePattern('findOnePost')
   findOne(
-    @Payload() id: number
+    @Payload() id: string
   ) {
     return this.postsService.findOne(id);
   }
@@ -34,10 +37,10 @@ export class PostsController {
     return this.postsService.update(updatePostDto.id, updatePostDto);
   }
 
-  @MessagePattern('removePost')
-  remove(
-    @Payload() id: number
+  @MessagePattern('togglePostState')
+  toggleState(
+    @Payload() id: string
   ) {
-    return this.postsService.remove(id);
+    return this.postsService.toggleState(id);
   }
 }
