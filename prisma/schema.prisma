@@ -15,6 +15,7 @@ datasource db {
 
 model Post {
   id String @id @default(uuid())
+  isActive Boolean @default(true)
 
   fileId String
   userId String
